@@ -114,7 +114,9 @@ export default function Index({ books }) {
           <Autocomplete
             id="asynchronous-demo"
             sx={{
-              width: { sm: "20rem", md: "30rem" },
+              mt: { xs: "0rem", sm: "7rem" },
+              width: { xs: "20rem", sm: "20rem" },
+              backgroundColor: "red",
               backgroundColor: "white",
               borderRadius: "10px",
             }}
@@ -194,7 +196,7 @@ export default function Index({ books }) {
                   <Link key={book.isbn} href={`/product/${book.isbn}`}>
                     <Card
                       sx={{
-                        maxWidth: "10rem",
+                        maxWidth: { xs: "90%", sm: "25%" },
                         borderRadius: "10px",
                         display: "flex",
                         flexDirection: "column",
