@@ -29,7 +29,6 @@ import { MongoClient } from "mongodb";
 
 export async function getServerSideProps(context) {
   const { productId } = context.params;
-  console.log(context.req.headers);
   try {
     const client = new MongoClient(process.env.MONGO_URI);
     await client.connect();
@@ -38,13 +37,27 @@ export async function getServerSideProps(context) {
     const book = await books.findOne({
       isbn: productId,
     });
+    console.log(productId);
+    const similarities = db.collection("similarities");
+    const similarBookDocument = await similarities.findOne({
+      pivot_isbn: productId,
+    });
+    const similarBooksListIsbns = similarBookDocument.most_similar.map(
+      (similarity) => similarity.isbn
+    );
+    const similarBooks = await books
+      .find({
+        isbn: { $in: similarBooksListIsbns },
+      })
+      .toArray();
+    console.log(similarBooks);
     if (book) {
       return {
         props: {
           product: JSON.stringify(book),
           user: { loggedIn: false },
           key: productId,
-          similarBookList: [],
+          similarBookList: JSON.stringify(similarBooks),
         },
       };
     } else {
@@ -53,15 +66,15 @@ export async function getServerSideProps(context) {
           product: null,
           user: { loggedIn: false },
           key: productId,
-          similarBookList: [],
+          similarBookList: JSON.stringify(similarBooks),
         },
       };
     }
+
     // const similarBooks = await axios.post(
     //   "http://127.0.0.1:5000/findSimilarBooks",
     //   { isbn: productId }
     // );
-    const similarBooks = undefined;
     // console.log("SIMILAR BOOKS LIST", similarBooks.data);
     if (response?.data?.product) {
       return {
@@ -97,7 +110,7 @@ export async function getServerSideProps(context) {
   }
 }
 function Product({ product, user, similarBookList }) {
-  const [simBooks, setSimBooks] = useState(similarBookList);
+  const [simBooks, setSimBooks] = useState(JSON.parse(similarBookList));
   const [book, setBook] = useState(JSON.parse(product));
   const [isLoggedIn, setIsLoggedIn] = useState(user.loggedIn);
   const [productAmount, setProductAmount] = useState(1);
@@ -130,7 +143,6 @@ function Product({ product, user, similarBookList }) {
       );
       if (!!trackedProducts) {
         if (!(book.isbn in trackedProducts)) {
-          console.log("here");
           console.log(trackedProducts);
           trackedProducts.push(book.isbn.toString());
         }
@@ -232,7 +244,6 @@ function Product({ product, user, similarBookList }) {
             <Grid item xs={1} md={1} />
             <Grid item xs={10} md={6}>
               <Box marginTop="3em" marginBottom="3em">
-                {console.log(book.ImageM)}
                 <img
                   style={{ borderRadius: "10px" }}
                   width={400}
@@ -457,21 +468,29 @@ function Product({ product, user, similarBookList }) {
                 simBooks?.map((item) => {
                   return (
                     <Grid item xs={12} md={4}>
-                      <Card sx={{ maxWidth: "80%", borderRadius: "10px" }}>
+                      <Card
+                        sx={{
+                          maxWidth: "80%",
+                          borderRadius: "10px",
+                        }}
+                      >
                         <CardMedia
                           component="img"
-                          image={
-                            "http://images.amazon.com/images/P/0674637526.01.LZZZZZZZ.jpg"
-                          }
+                          height="200"
+                          image={item.ImageL}
                           alt="image of book cover"
                         />
                         <CardContent>
                           <Typography>{item.category}</Typography>
                           <Typography gutterBottom variant="h5" component="div">
-                            {item.title}
+                            {item.title.length > 15
+                              ? `${item.title.substring(0, 15)}...`
+                              : item.title}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {item.summary}
+                            {item.summary.length > 50
+                              ? `${item.summary.substring(1, 50)}...`
+                              : item.summary}
                           </Typography>
                           <Typography style={{ marginTop: "1em" }}>
                             {item.price}&euro;
