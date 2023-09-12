@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   // console.log(context);
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/checkUserExists",
+      "/api/checkUserExists",
       {
         email: nameInURL,
       },

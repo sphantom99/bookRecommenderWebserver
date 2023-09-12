@@ -74,16 +74,15 @@ export default function Index({ books }) {
   const fetchNewOptions = async (inputValue) => {
     // console.log(inputValue);
     if (inputValue.length > 3) {
-      const newOptionsResponse = await axios.post(
-        "http://localhost:3000/api/getNewOptions",
-        { inputValue }
-      );
+      const newOptionsResponse = await axios.post("/api/getNewOptions", {
+        inputValue,
+      });
       setAutocompleteOptions(newOptionsResponse.data);
     }
   };
   const getNewFrontPageBooks = async (newPage) => {
     const newFrontBooksResponse = await axios.post(
-      "http://localhost:3000/api/getNewFrontPageBooks",
+      "/api/getNewFrontPageBooks",
       { page: newPage }
     );
     if (!!newFrontBooksResponse.data) {
@@ -115,7 +114,7 @@ export default function Index({ books }) {
           <Autocomplete
             id="asynchronous-demo"
             sx={{
-              width: "30rem",
+              width: { sm: "20rem", md: "30rem" },
               backgroundColor: "white",
               borderRadius: "10px",
             }}
@@ -182,13 +181,20 @@ export default function Index({ books }) {
             )}
           />
           <Paper elevation={3} sx={{ pb: "3em" }}>
-            <Box m="3em" display="flex" gap="4em" flexWrap="wrap">
+            <Box
+              m="3em"
+              display="flex"
+              gap="4em"
+              flexWrap="wrap"
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
               {frontPageBooks.map((book) => {
                 return (
                   <Link key={book.isbn} href={`/product/${book.isbn}`}>
                     <Card
                       sx={{
-                        width: "29%",
+                        maxWidth: "10rem",
                         borderRadius: "10px",
                         display: "flex",
                         flexDirection: "column",
@@ -212,7 +218,9 @@ export default function Index({ books }) {
                       >
                         <Typography>{book.category}</Typography>
                         <Typography gutterBottom variant="h6" component="div">
-                          {book.title}
+                          {book.title.length > 20
+                            ? book.title.substring(0, 20)
+                            : book.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {book.summary?.slice(0, 100)}...

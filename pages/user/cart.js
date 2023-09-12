@@ -30,7 +30,7 @@ import Link from "next/link";
 export async function getServerSideProps(context) {
   try {
     const userResponse = await axios.post(
-      "http://localhost:3000/api/getUserName",
+      "/api/getUserName",
       {},
       {
         withCredentials: true,
@@ -72,7 +72,7 @@ function Cart({ username }) {
         try {
           const myLocalStorage = window.localStorage;
           const response = await axios.post(
-            "http://localhost:3000/api/getCartRecommendations",
+            "/api/getCartRecommendations",
             {
               trackedBooks: JSON.parse(
                 myLocalStorage.getItem("ReadersCoveTracker")
@@ -107,7 +107,7 @@ function Cart({ username }) {
             console.log("err");
           }
           const simBooksResponse = await axios.post(
-            "http://localhost:3000/api/getUserSimilarBooks",
+            "/api/getUserSimilarBooks",
             { username, source },
             { withCredentials: true }
           );

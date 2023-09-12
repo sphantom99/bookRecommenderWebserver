@@ -36,7 +36,7 @@ export default function SignIn() {
     let success;
     try {
       success = await axios.post(
-        "http://localhost:3000/api/login",
+        "/api/login",
         { email: emailValue, password },
         { withCredentials: true }
       );
