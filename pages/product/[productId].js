@@ -239,21 +239,19 @@ function Product({ product, user, similarBookList }) {
       style={{
         display: "flex",
         gap: "5em",
-        backgroundImage: `url(/aboutBG.jpg)`,
+        backgroundImage: `url(/about2BG.jpg)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
       <Container style={{ marginTop: "5em", marginBottom: "5em" }}>
-        <Paper elevation={3} sx={{ pb: "3em" }}>
+        <Paper elevation={3} sx={{ pb: "3em", mb: "2em" }}>
           <Grid container>
             <Grid item xs={1} md={1} />
             <Grid item xs={10} md={6}>
-              <Box marginTop="3em" marginBottom="3em">
+              <Box marginTop="3em">
                 <img
                   style={{ borderRadius: "10px" }}
-                  width="60%"
-                  height="90%"
                   alt="Image of product"
                   src={`${book.ImageL}`}
                 />
@@ -265,10 +263,12 @@ function Product({ product, user, similarBookList }) {
                 flexDirection="column"
                 flexWrap="wrap"
                 alignText="center"
-                marginTop="5rem"
                 rowGap="1em"
                 marginBottom="2em"
-                sx={{ padding: { xs: "3em", md: "0em" } }}
+                sx={{
+                  padding: { xs: "3em", md: "0em" },
+                  marginTop: { xs: "0em", md: "2em" },
+                }}
               >
                 <Typography variant="h4">{book.title}</Typography>
                 <Typography variant="subtitle1" color="gray">
@@ -481,8 +481,9 @@ function Product({ product, user, similarBookList }) {
                     <Grid item xs={12} md={4}>
                       <Card
                         sx={{
-                          maxWidth: "80%",
                           borderRadius: "10px",
+                          maxWidth: { sx: "100%", md: "80%" },
+                          margin: "auto",
                         }}
                       >
                         <CardMedia
