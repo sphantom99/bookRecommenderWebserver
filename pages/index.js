@@ -93,7 +93,7 @@ export default function Index({ books }) {
     <div
       style={{
         display: "flex",
-        backgroundImage: `url(/aboutBG.jpg)`,
+        backgroundImage: `url(/about2BG.jpg)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         marginTop: "-20em",
@@ -182,7 +182,7 @@ export default function Index({ books }) {
               />
             )}
           />
-          <Paper elevation={3} sx={{ pb: "3em" }}>
+          <Box elevation={3} sx={{ pb: "3em" }}>
             <Box
               m="3em"
               display="flex"
@@ -207,8 +207,8 @@ export default function Index({ books }) {
                       <CardMedia
                         component="img"
                         width="20"
-                        height="200"
-                        image={book.ImageM}
+                        height="250"
+                        image={book.ImageL}
                         alt="image of book cover"
                       />
                       <CardContent
@@ -220,12 +220,12 @@ export default function Index({ books }) {
                       >
                         <Typography>{book.category}</Typography>
                         <Typography gutterBottom variant="h6" component="div">
-                          {book.title.length > 20
-                            ? book.title.substring(0, 20)
+                          {book.title.length > 15
+                            ? `${book.title.substring(0, 15)}...`
                             : book.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {book.summary?.slice(0, 100)}...
+                          {book.summary?.slice(0, 50)}...
                         </Typography>
                         <Typography
                           style={{ marginTop: "1em", color: "green" }}
@@ -255,7 +255,15 @@ export default function Index({ books }) {
                 );
               })}
             </Box>
-            <Box display="flex" justifyContent="center">
+            <Paper
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "fit-content",
+                margin: "auto",
+                py: "1em",
+              }}
+            >
               <Pagination
                 count={30}
                 color="primary"
@@ -263,8 +271,8 @@ export default function Index({ books }) {
                   getNewFrontPageBooks(newPage);
                 }}
               />
-            </Box>
-          </Paper>
+            </Paper>
+          </Box>
         </Box>
       </Container>
     </div>

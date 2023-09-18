@@ -42,15 +42,22 @@ export async function getServerSideProps(context) {
     const similarBookDocument = await similarities.findOne({
       pivot_isbn: productId,
     });
-    const similarBooksListIsbns = similarBookDocument.most_similar.map(
-      (similarity) => similarity.isbn
-    );
-    const similarBooks = await books
-      .find({
-        isbn: { $in: similarBooksListIsbns },
-      })
-      .toArray();
-    console.log(similarBooks);
+    console.log("This is the similarBook", similarBookDocument);
+    let similarBooks = null;
+    if (
+      similarBookDocument !== null &&
+      similarBookDocument.most_similar.length > 0
+    ) {
+      const similarBooksListIsbns = similarBookDocument.most_similar?.map(
+        (similarity) => similarity.isbn
+      );
+      similarBooks = await books
+        .find({
+          isbn: { $in: similarBooksListIsbns },
+        })
+        .toArray();
+      console.log(similarBooks);
+    }
     if (book) {
       return {
         props: {
@@ -66,7 +73,7 @@ export async function getServerSideProps(context) {
           product: null,
           user: { loggedIn: false },
           key: productId,
-          similarBookList: JSON.stringify(similarBooks),
+          similarBookList: null,
         },
       };
     }
@@ -237,7 +244,6 @@ function Product({ product, user, similarBookList }) {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div style={{}} />
       <Container style={{ marginTop: "5em", marginBottom: "5em" }}>
         <Paper elevation={3} sx={{ pb: "3em" }}>
           <Grid container>
@@ -246,8 +252,8 @@ function Product({ product, user, similarBookList }) {
               <Box marginTop="3em" marginBottom="3em">
                 <img
                   style={{ borderRadius: "10px" }}
-                  width={400}
-                  height={500}
+                  width="60%"
+                  height="90%"
                   alt="Image of product"
                   src={`${book.ImageL}`}
                 />
@@ -463,7 +469,12 @@ function Product({ product, user, similarBookList }) {
           >
             <Divider />
             <Typography variant="h4">Similar Products:</Typography>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+            >
               {simBooks !== null && simBooks?.length !== 0 ? (
                 simBooks?.map((item) => {
                   return (
