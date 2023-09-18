@@ -96,8 +96,6 @@ export default function Index({ books }) {
         backgroundImage: `url(/about2BG.jpg)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        marginTop: "-20em",
-        gap: "5em",
       }}
     >
       <Container maxWidth="lg">
@@ -105,8 +103,7 @@ export default function Index({ books }) {
           display="flex"
           flexDirection="column"
           alignItems="center"
-          mt="10rem"
-          rowGap="3em"
+          mt="2rem"
         >
           <Typography variant="h3" color="white">
             Welcome to the Reader's Cove
@@ -114,22 +111,14 @@ export default function Index({ books }) {
           <Autocomplete
             id="asynchronous-demo"
             sx={{
-              mt: { xs: "0rem", sm: "7rem" },
+              mt: { xs: "0rem", sm: "2rem" },
               width: { xs: "20rem", sm: "20rem" },
-              backgroundColor: "red",
               backgroundColor: "white",
               borderRadius: "10px",
             }}
             isOptionEqualToValue={(option, value) =>
               option.title === value.title
             }
-            // open={open}
-            // onOpen={() => {
-            //   setOpen(true);
-            // }}
-            // onClose={() => {
-            //   setOpen(false);
-            // }}
             renderOption={(props, option) => (
               <Link href={`/product/${option.isbn}`}>
                 <Box
